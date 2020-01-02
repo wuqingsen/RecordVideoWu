@@ -1,0 +1,28 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.baidu.aip.asrwakeup3.core">
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <application>
+        <!--<meta-data-->
+                <!--android:name="com.baidu.speech.APP_ID"-->
+                <!--android:value="15590577"/>-->
+        <!--<meta-data-->
+                <!--android:name="com.baidu.speech.API_KEY"-->
+                <!--android:value="q2uPyBe6LmWTZlvb0g1dzcHV"/>-->
+        <!--<meta-data-->
+                <!--android:name="com.baidu.speech.SECRET_KEY"-->
+                <!--android:value="y7S7hAI894BB3LF1yHYmvQEus1B6wPvj"/>-->
+
+        <meta-data
+            android:name="com.baidu.speech.APP_ID"
+            android:value="18158413" />
+        <meta-data
+            android:name="com.baidu.speech.API_KEY"
+            android:value="jab0G2PXFEr9hzU9DaQBufkp" />
+        <meta-data
+            android:name="com.baidu.speech.SECRET_KEY"
+            android:value="VwAMKQ9gdlkASLhRZ5sv2F68LbihT52f" />
+    </application>
+</manifest>
