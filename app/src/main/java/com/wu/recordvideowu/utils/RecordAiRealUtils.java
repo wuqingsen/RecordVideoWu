@@ -6,14 +6,19 @@ import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
+import com.baidu.aip.asrwakeup3.core.mini.AutoCheck;
 import com.baidu.speech.asr.SpeechConstant;
 import com.wu.recordvideowu.RecordVideoRealActivity;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -38,6 +43,7 @@ public class RecordAiRealUtils {
 //    public int height = 720;
     public int width = 1920;
     public int height = 1080;
+    private String BOT_ID = "26435";
 
     public RecordAiRealUtils(RecordVideoRealActivity mActivity, Context mContext) {
         this.mActivity = mActivity;
@@ -84,11 +90,30 @@ public class RecordAiRealUtils {
         params.put(SpeechConstant.PID, 15364); // Unit  2.0 固定pid,仅支持中文普通话
         params.put(SpeechConstant.VAD_ENDPOINT_TIMEOUT, 0); // 长语音
 
+        params.put(SpeechConstant.ACCEPT_AUDIO_DATA, true);
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "guoshou.pcm";
+        params.put(SpeechConstant.OUT_FILE, path);
+
         //保存录音文件
 //        params.put(SpeechConstant.ACCEPT_AUDIO_DATA, true);
 //        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + StaticVideo.VoiceNamePcm;
 //        params.put(SpeechConstant.OUT_FILE, path);
+        params.put(SpeechConstant.BOT_SESSION_LIST, unitParams());
 
+        // 复制此段可以自动检测错误
+        (new AutoCheck(mContext.getApplicationContext(), new Handler() {
+            public void handleMessage(Message msg) {
+                if (msg.what == 100) {
+                    AutoCheck autoCheck = (AutoCheck) msg.obj;
+                    synchronized (autoCheck) {
+                        String message = autoCheck.obtainErrorMessage(); // autoCheck.obtainAllMessage();
+                        mActivity.tv_text.append(message + "\n");
+                        ; // 可以用下面一行替代，在logcat中查看代码
+                        // Log.w("AutoCheckMessage", message);
+                    }
+                }
+            }
+        },false)).checkAsr(params);
         String json = null; // 这里可以替换成你需要测试的json
         json = new JSONObject(params).toString();
         mActivity.asr.send(SpeechConstant.ASR_START, json, null, 0, 0);
@@ -97,7 +122,7 @@ public class RecordAiRealUtils {
 
     //音频录制停止
     private void stopVoice() {
-        mActivity.asr.send(SpeechConstant.WAKEUP_STOP, null, null, 0, 0); //
+        mActivity.asr.send(SpeechConstant.ASR_STOP, null, null, 0, 0); //
         Log.e("=====音频录制停止时间", getTime());
     }
 
@@ -142,5 +167,19 @@ public class RecordAiRealUtils {
         //获取当前时间
         String str = formatter.format(curDate);
         return str;
+    }
+
+    private JSONArray unitParams() {
+        JSONArray json = new JSONArray();
+        try {
+            JSONObject bot = new JSONObject();
+            bot.put("bot_id",BOT_ID);
+            bot.put("bot_session_id","");
+            bot.put("bot_session","");
+            json.put(bot);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json;
     }
 }

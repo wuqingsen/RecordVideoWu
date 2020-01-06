@@ -22,13 +22,13 @@
             android:layout_height="match_parent" />
 
         <ScrollView
-            android:layout_width="200dp"
+            android:layout_width="300dp"
             android:layout_height="match_parent"
             android:padding="10dp">
 
             <TextView
                 android:id="@+id/tv_text"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="语音识别结果:"
                 android:textColor="@color/colorAccent"

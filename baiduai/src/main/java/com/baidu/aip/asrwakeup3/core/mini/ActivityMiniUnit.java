@@ -19,6 +19,7 @@ import com.baidu.speech.EventListener;
 import com.baidu.speech.EventManager;
 import com.baidu.speech.EventManagerFactory;
 import com.baidu.speech.asr.SpeechConstant;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,10 +29,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- *  集成文档： http://ai.baidu.com/docs#/ASR-Android-SDK/top 集成指南一节
- *  demo目录下doc_integration_DOCUMENT
- *      ASR-INTEGRATION-helloworld  ASR集成指南-集成到helloworld中 对应 ActivityMiniRecog
- *      ASR-INTEGRATION-TTS-DEMO ASR集成指南-集成到合成DEMO中 对应 ActivityRecog
+ * 集成文档： http://ai.baidu.com/docs#/ASR-Android-SDK/top 集成指南一节
+ * demo目录下doc_integration_DOCUMENT
+ * ASR-INTEGRATION-helloworld  ASR集成指南-集成到helloworld中 对应 ActivityMiniRecog
+ * ASR-INTEGRATION-TTS-DEMO ASR集成指南-集成到合成DEMO中 对应 ActivityRecog
  */
 
 public class ActivityMiniUnit extends AppCompatActivity implements EventListener {
@@ -40,10 +41,10 @@ public class ActivityMiniUnit extends AppCompatActivity implements EventListener
     protected Button btn;
     protected Button stopBtn;
     private static String DESC_TEXT =
-            "UNIT 2.0为自定义语义解析+多轮会话等功能。语音SDK使用时，仅省去一次http请求。（语音SDK调用Unit实际效果）=（语音识别后的文字+Unit http请求结果）\n\n"+
-            "精简版Unit，带有SDKUnit功能的最少代码，仅仅展示如何调用，\n" +
-            "结果返回‘我不知道应该怎么答复您。’表示测试成功。 \n" +
-            "上述句子测试成功后，Unit 2.0具体功能请通过Unit的QQ群，工单，论坛咨询。语音相关反馈方式不回复Unit相关问题。https://ai.baidu.com/unit/home";
+            "UNIT 2.0为自定义语义解析+多轮会话等功能。语音SDK使用时，仅省去一次http请求。（语音SDK调用Unit实际效果）=（语音识别后的文字+Unit http请求结果）\n\n" +
+                    "精简版Unit，带有SDKUnit功能的最少代码，仅仅展示如何调用，\n" +
+                    "结果返回‘我不知道应该怎么答复您。’表示测试成功。 \n" +
+                    "上述句子测试成功后，Unit 2.0具体功能请通过Unit的QQ群，工单，论坛咨询。语音相关反馈方式不回复Unit相关问题。https://ai.baidu.com/unit/home";
 
     private EventManager asr;
 
@@ -71,7 +72,7 @@ public class ActivityMiniUnit extends AppCompatActivity implements EventListener
         params.put(SpeechConstant.ACCEPT_AUDIO_VOLUME, false);
         params.put(SpeechConstant.PID, 15364); // Unit  2.0 固定pid,仅支持中文普通话
         // params.put(SpeechConstant.NLU, "enable");
-        // params.put(SpeechConstant.VAD_ENDPOINT_TIMEOUT, 0); // 长语音
+         params.put(SpeechConstant.VAD_ENDPOINT_TIMEOUT, 0); // 长语音
         // params.put(SpeechConstant.IN_FILE, "res:///com/baidu/android/voicedemo/16k_test.pcm");
         // params.put(SpeechConstant.VAD, SpeechConstant.VAD_DNN);
 
@@ -90,7 +91,7 @@ public class ActivityMiniUnit extends AppCompatActivity implements EventListener
                     }
                 }
             }
-        },enableOffline)).checkAsr(params);
+        }, enableOffline)).checkAsr(params);
         String json = null; // 可以替换成自己的json
         json = new JSONObject(params).toString(); // 这里可以替换成你需要测试的json
         asr.send(event, json, null, 0, 0);
@@ -99,7 +100,7 @@ public class ActivityMiniUnit extends AppCompatActivity implements EventListener
 
     /**
      * 点击停止按钮
-     *  基于SDK集成4.1 发送停止事件
+     * 基于SDK集成4.1 发送停止事件
      */
     private void stop() {
         printLog("停止识别：ASR_STOP");
@@ -156,10 +157,10 @@ public class ActivityMiniUnit extends AppCompatActivity implements EventListener
     }
 
     @Override
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
         asr.send(SpeechConstant.ASR_CANCEL, "{}", null, 0, 0);
-        Log.i("ActivityMiniRecog","On pause");
+        Log.i("ActivityMiniRecog", "On pause");
     }
 
     @Override
@@ -178,15 +179,16 @@ public class ActivityMiniUnit extends AppCompatActivity implements EventListener
 
     /**
      * Unit 2.0具体功能请通过Unit的QQ群，工单，论坛咨询。语音相关反馈方式不回复Unit相关问题
+     *
      * @return
      */
     private JSONArray unitParams() {
         JSONArray json = new JSONArray();
         try {
             JSONObject bot = new JSONObject();
-            bot.put("bot_id",BOT_ID);
-            bot.put("bot_session_id","");
-            bot.put("bot_session","");
+            bot.put("bot_id", BOT_ID);
+            bot.put("bot_session_id", "");
+            bot.put("bot_session", "");
             json.put(bot);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -213,6 +215,13 @@ public class ActivityMiniUnit extends AppCompatActivity implements EventListener
         } else if (data != null) {
             logTxt += " ;data length=" + data.length;
         }
+
+        if (data != null) {
+            Log.e("=====data不是空", data.length + "");
+        } else {
+            Log.e("=====data=null",  "为null");
+        }
+
         printLog(logTxt);
     }
 

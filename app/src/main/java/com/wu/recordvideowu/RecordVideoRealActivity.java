@@ -36,6 +36,8 @@ import com.wu.recordvideowu.utils.RecordAiRealUtils;
 import com.wu.recordvideowu.utils.StaticVideo;
 import com.wu.recordvideowu.utils.VideoFaceUtils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import butterknife.BindView;
@@ -58,7 +60,7 @@ public class RecordVideoRealActivity extends AppCompatActivity implements EventL
     @BindView(R.id.face_view)
     public FaceView mFaceView;
     @BindView(R.id.tv_text)
-    TextView tv_text;
+    public TextView tv_text;
     //语音识别开始
     public EventManager asr;
 
@@ -214,12 +216,26 @@ public class RecordVideoRealActivity extends AppCompatActivity implements EventL
     public void onEvent(String name, String params, byte[] data, int offset, int length) {
         //识别回调
         String logTxt = "";
-        if (params != null && !params.isEmpty()) {
-            logTxt += "识别成功：" + params;
+        if (params != null) {
+            try {
+                JSONObject jsonObject = new JSONObject(params);
+                if (jsonObject.getString("best_result") != null) {
+                    String result = jsonObject.getString("best_result");
+                    Log.e("=====语音识别", params);
+                    logTxt += "识别成功：" + result;
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             tv_text.append("\n" + logTxt);
         }
+
         if (data != null) {
             MediaMuxerThread.audioThread.encode(data);
+//            Log.e("=====data", "音频数据不为null");
+        } else {
+//            Log.e("=====data", "音频数据为null");
         }
     }
 
