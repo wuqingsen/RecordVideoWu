@@ -258,7 +258,7 @@ public class RecordVideoRealActivity extends AppCompatActivity implements EventL
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        asr.send(SpeechConstant.WAKEUP_STOP, "{}", null, 0, 0);
+        asr.send(SpeechConstant.ASR_STOP, "{}", null, 0, 0);
     }
 
 }
