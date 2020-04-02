@@ -101,6 +101,10 @@ public class RecordVideoRealActivity extends AppCompatActivity implements EventL
             case R.id.btn_start:
                 if (!isStartRecord) {
                     //开始录制
+                    stopCamera();
+                    camera = aiUtils.getBackCamera();
+                    aiUtils.prepareVideo();
+
                     startView();
                     aiUtils.startRecord();
                     MediaMuxerThread.startMuxer();
@@ -204,12 +208,7 @@ public class RecordVideoRealActivity extends AppCompatActivity implements EventL
             faceUtils.stopGoogleFaceDetect();
         }
         //销毁
-        if (null != camera) {
-            camera.setPreviewCallback(null);
-            camera.stopPreview();
-            camera.release();
-            camera = null;
-        }
+        stopCamera();
     }
 
     @Override
@@ -261,4 +260,13 @@ public class RecordVideoRealActivity extends AppCompatActivity implements EventL
         asr.send(SpeechConstant.ASR_STOP, "{}", null, 0, 0);
     }
 
+    private void stopCamera() {
+        //销毁
+        if (null != camera) {
+            camera.setPreviewCallback(null);
+            camera.stopPreview();
+            camera.release();
+            camera = null;
+        }
+    }
 }
